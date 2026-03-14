@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nunez Sensi</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+color:white;
+text-align:center;
+height:100vh;
+overflow:hidden;
+background:linear-gradient(270deg,#050505,#0f0f2b,#000000);
+background-size:600% 600%;
+animation:bg 15s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+h1{
+margin-top:30px;
+font-size:40px;
+letter-spacing:2px;
+}
+
+.botao{
+width:80%;
+max-width:350px;
+background:linear-gradient(45deg,#00fff2,#0051ff);
+color:white;
+font-size:26px;
+font-weight:bold;
+padding:18px;
+border-radius:50px;
+margin:20px auto;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 0 20px #00fff2;
+}
+
+.botao:hover{
+transform:scale(1.05);
+box-shadow:0 0 30px #00fff2;
+}
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:90%;
+max-width:500px;
+max-height:70vh;
+overflow:auto;
+background:#111;
+border-radius:20px;
+padding:20px;
+display:none;
+box-shadow:0 0 40px #00fff2;
+}
+
+.lista{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.item{
+background:#222;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.item:hover{
+background:#00fff2;
+color:black;
+}
+
+.preco{
+font-size:45px;
+font-weight:bold;
+margin-top:20px;
+background:linear-gradient(90deg,#00fff2,#00aaff,#00fff2);
+background-size:200% 200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:holograma 2s linear infinite;
+}
+
+@keyframes holograma{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.feedbackGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+padding:20px;
+}
+
+.campoFeedback{
+width:100%;
+height:40px;
+background:white;
+color:black;
+border:none;
+border-radius:6px;
+padding:10px;
+font-size:16px;
+}
+
+#mensagem{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#00fff2;
+color:black;
+padding:15px 30px;
+border-radius:10px;
+font-weight:bold;
+display:none;
+box-shadow:0 0 20px #00fff2;
+z-index:999;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>NUNEZ SENSI</h1>
+
+<div id="mensagem"></div>
+
+<div class="botao" onclick="tocarSom(); abrirMarcas()">Marca</div>
+<div class="botao" onclick="tocarSom(); abrirModelos()">Modelos</div>
+<div class="botao" onclick="tocarSom(); mostrarPreco()">Preço</div>
+<div class="botao" onclick="tocarSom(); abrirWhatsapp()">WhatsApp</div>
+<div class="botao" onclick="tocarSom(); abrirFeedback()">Feedback</div>
+
+<audio id="clickSom">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
+</audio>
+
+<div id="popup" class="popup">
+<h2 id="tituloPopup"></h2>
+<div id="conteudoPopup" class="lista"></div>
+<div id="precoPopup"></div>
+</div>
+
+<div id="feedbackTela" style="display:none;">
+
+<h1>Feedback</h1>
+<h2>Conte oq vc achou da nunez sensi</h2>
+
+<div style="font-size:35px;color:gold;">★ ★ ★ ★ ★</div>
+
+<div class="feedbackGrid">
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+<textarea class="campoFeedback"></textarea>
+</div>
+
+<div class="botao" onclick="publicarFeedback()">Publicar</div>
+
+</div>
+
+<script>
+
+const pix="66981124524"
+let marcaSelecionada=""
+let modeloSelecionado=""
+
+function tocarSom(){
+document.getElementById("clickSom").play()
+}
+
+function mostrarMensagem(texto){
+
+let msg=document.getElementById("mensagem")
+
+msg.innerText=texto
+msg.style.display="block"
+
+setTimeout(()=>{
+msg.style.display="none"
+},2000)
+
+}
+
+const celulares={
+Samsung:["Galaxy A01","Galaxy A02","Galaxy A03","Galaxy A10","Galaxy A11","Galaxy A12","Galaxy A20","Galaxy A21","Galaxy A22","Galaxy A30","Galaxy A31","Galaxy A32","Galaxy A50","Galaxy A51","Galaxy A52","Galaxy S20","Galaxy S21","Galaxy S22","Galaxy S23"],
+Xiaomi:["Redmi 8","Redmi 9","Redmi 10","Redmi 11","Redmi 12","Redmi Note 8","Redmi Note 9","Redmi Note 10","Redmi Note 11","Redmi Note 12","Redmi Note 13","Poco X3","Poco X4","Poco X5","Poco F3","Poco F4"],
+Motorola:["Moto G6","Moto G7","Moto G8","Moto G9","Moto G10","Moto G20","Moto G30","Moto G31","Moto G32","Moto G41","Moto G42","Moto G50","Moto G51","Moto G52","Moto G53","Moto Edge 20","Moto Edge 30"],
+Apple:["iPhone 6","iPhone 7","iPhone 8","iPhone X","iPhone XR","iPhone 11","iPhone 12","iPhone 13","iPhone 14","iPhone 15"]
+}
+
+function fecharPopup(){
+document.getElementById("popup").style.display="none"
+document.getElementById("precoPopup").innerHTML=""
+}
+
+document.addEventListener("click",function(e){
+
+let popup=document.getElementById("popup")
+
+if(popup.style.display==="block"){
+if(!popup.contains(e.target) && !e.target.classList.contains("botao")){
+fecharPopup()
+}
+}
+
+})
+
+function abrirMarcas(){
+
+let popup=document.getElementById("popup")
+popup.style.display="block"
+
+document.getElementById("tituloPopup").innerText="Escolha a Marca"
+
+let conteudo=document.getElementById("conteudoPopup")
+conteudo.innerHTML=""
+
+Object.keys(celulares).forEach(marca=>{
+
+let div=document.createElement("div")
+div.className="item"
+div.innerText=marca
+
+div.onclick=()=>{
+tocarSom()
+marcaSelecionada=marca
+fecharPopup()
+
+mostrarMensagem("Marca escolhida: "+marca)
+
+}
+
+conteudo.appendChild(div)
+
+})
+
+}
+
+function abrirModelos(){
+
+if(marcaSelecionada==""){
+mostrarMensagem("Escolha uma marca primeiro!")
+return
+}
+
+let popup=document.getElementById("popup")
+popup.style.display="block"
+
+document.getElementById("tituloPopup").innerText="Modelos "+marcaSelecionada
+
+let conteudo=document.getElementById("conteudoPopup")
+conteudo.innerHTML=""
+
+celulares[marcaSelecionada].forEach(modelo=>{
+
+let div=document.createElement("div")
+div.className="item"
+div.innerText=modelo
+
+div.onclick=()=>{
+tocarSom()
+modeloSelecionado=modelo
+fecharPopup()
+
+mostrarMensagem("Modelo escolhido: "+modelo)
+}
+
+conteudo.appendChild(div)
+
+})
+
+}
+
+function mostrarPreco(){
+
+let popup=document.getElementById("popup")
+popup.style.display="block"
+
+document.getElementById("tituloPopup").innerText="Preço"
+document.getElementById("conteudoPopup").innerHTML=""
+
+let r=Math.random()
+let preco=""
+
+if(r<0.7){preco="R$10,00"}
+else if(r<0.9){preco="R$7,00"}
+else{preco="R$3,50"}
+
+document.getElementById("precoPopup").innerHTML=
+"<div class='preco'>"+preco+"</div><br>PIX: "+pix
+
+}
+
+function abrirWhatsapp(){
+
+let numero="5566981124524"
+let mensagem="Olá! Tive interesse na nunez sensi, e gostaria de adquiri-la💸"
+
+let url="https://wa.me/"+numero+"?text="+encodeURIComponent(mensagem)
+
+window.open(url,"_blank")
+
+}
+
+function abrirFeedback(){
+document.getElementById("feedbackTela").style.display="block"
+window.scrollTo(0,document.body.scrollHeight)
+}
+
+function publicarFeedback(){
+
+mostrarMensagem("Feedback publicado com sucesso!")
+
+document.getElementById("feedbackTela").style.display="none"
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+})
+
+}
+
+</script>
+
+</body>
+</html>
