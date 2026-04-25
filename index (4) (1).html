@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>NUNEZ ULTRA FINAL</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:black;
+color:#ff0000;
+overflow:hidden;
+}
+
+/* FUNDO GRID */
+body::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(#ff000010 1px, transparent 1px),
+linear-gradient(90deg,#ff000010 1px, transparent 1px);
+background-size:40px 40px;
+z-index:-2;
+}
+
+/* PARTÍCULAS */
+canvas{
+position:absolute;
+z-index:-1;
+}
+
+/* LOGIN */
+.login{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:rgba(20,0,0,0.7);
+padding:40px;
+border-radius:20px;
+box-shadow:0 0 40px red;
+text-align:center;
+width:320px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:#000;
+color:white;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:red;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* APP */
+.app{
+display:none;
+padding:10px;
+overflow-y:auto;
+height:100vh;
+}
+
+/* TERMINAL */
+.terminal{
+background:black;
+border:1px solid red;
+padding:10px;
+height:120px;
+overflow:auto;
+font-size:12px;
+box-shadow:0 0 15px red;
+margin-bottom:10px;
+}
+
+/* SCAN */
+.scan{
+width:100%;
+height:10px;
+background:#222;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:15px;
+}
+.scanbar{
+height:100%;
+width:0%;
+background:red;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+/* CARD */
+.card{
+background:rgba(20,0,0,0.6);
+padding:12px;
+border-radius:12px;
+box-shadow:0 0 15px #ff000044;
+}
+
+/* TOGGLE */
+.toggle{
+width:50px;height:25px;
+background:#222;
+border-radius:20px;
+position:relative;
+cursor:pointer;
+margin-top:8px;
+}
+.toggle::after{
+content:"";
+width:20px;height:20px;
+background:white;
+position:absolute;
+top:2px;left:2px;
+border-radius:50%;
+transition:0.3s;
+}
+.toggle.active{background:red;}
+.toggle.active::after{left:27px;}
+
+select, input[type=range]{
+width:100%;
+margin-top:8px;
+}
+
+.bigbtn{
+margin-top:15px;
+padding:15px;
+background:red;
+border:none;
+border-radius:12px;
+font-size:16px;
+box-shadow:0 0 20px red;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+<h2>NUNEZ SYSTEM</h2>
+<input id="user" placeholder="Usuário">
+<input id="pass" placeholder="Senha">
+<button onclick="entrar()">ACESSAR</button>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+
+<h3>🧠 IA SYSTEM ONLINE</h3>
+
+<div class="terminal" id="terminal"></div>
+
+<div class="scan"><div class="scanbar" id="scanbar"></div></div>
+
+<div class="grid">
+
+<div class="card">🎯 Assistência de Mira<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">⚙️ Estabilização<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">🎯 Precisão Dinâmica<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">🔍 Foco Inteligente<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">📡 Rastreamento<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">🧠 Otimização<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">⚡ Boost<div class="toggle" onclick="toggle(this)"></div></div>
+<div class="card">🛡 Proteção<div class="toggle" onclick="toggle(this)"></div></div>
+
+</div>
+
+<div class="card">
+Campo de visão
+<input type="range" min="0" max="100" value="50" oninput="v(this)">
+<p id="v">50%</p>
+</div>
+
+<div class="card">
+Intensidade
+<input type="range" min="0" max="100" value="70">
+</div>
+
+<div class="card">
+Velocidade
+<input type="range" min="0" max="100" value="60">
+</div>
+
+<div class="card">
+Alvo
+<select>
+<option>Cabeça</option>
+<option>Pescoço</option>
+<option>Peito</option>
+<option>Ombro</option>
+<option>Perna</option>
+<option>Automático</option>
+</select>
+</div>
+
+<button class="bigbtn" onclick="abrirFF()">🔥 ABRIR FREE FIRE</button>
+
+</div>
+
+<script>
+
+// LOGIN
+function entrar(){
+document.getElementById("login").style.display="none"
+document.getElementById("app").style.display="block"
+startSystem()
+}
+
+// TOGGLE + SOM + SALVAR
+function toggle(el){
+el.classList.toggle("active")
+new Audio("https://www.soundjay.com/button/beep-07.wav").play()
+localStorage.setItem(el.innerText, el.classList.contains("active"))
+}
+
+// SLIDER
+function v(el){
+document.getElementById("v").innerText = el.value+"%"
+}
+
+// ABRIR FF
+function abrirFF(){
+window.location.href="intent://#Intent;package=com.dts.freefireth;end"
+}
+
+// IA TERMINAL
+let mensagens=[
+"Inicializando sistema...",
+"Carregando módulos...",
+"Otimização ativa...",
+"Monitorando desempenho...",
+"Sistema pronto."
+]
+
+let i=0,j=0
+
+function escrever(){
+if(i<mensagens.length){
+if(j<mensagens[i].length){
+document.getElementById("terminal").innerHTML+=mensagens[i][j]
+j++
+setTimeout(escrever,20)
+}else{
+document.getElementById("terminal").innerHTML+="<br>"
+i++;j=0
+setTimeout(escrever,300)
+}
+}
+}
+
+// SCAN
+function scan(){
+let bar=document.getElementById("scanbar")
+let w=0
+let interval=setInterval(()=>{
+w++
+bar.style.width=w+"%"
+if(w>=100) clearInterval(interval)
+},20)
+}
+
+function startSystem(){
+escrever()
+scan()
+}
+
+// FUNDO
+let c=document.getElementById("bg")
+let ctx=c.getContext("2d")
+c.width=window.innerWidth
+c.height=window.innerHeight
+
+let dots=[]
+for(let i=0;i<80;i++){
+dots.push({x:Math.random()*c.width,y:Math.random()*c.height})
+}
+
+function draw(){
+ctx.clearRect(0,0,c.width,c.height)
+dots.forEach(d=>{
+ctx.fillStyle="red"
+ctx.fillRect(d.x,d.y,2,2)
+})
+requestAnimationFrame(draw)
+}
+draw()
+
+</script>
+
+</body>
+</html>
